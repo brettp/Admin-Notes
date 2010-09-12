@@ -23,6 +23,6 @@ if ($notes = elgg_list_entities_from_metadata($options)) {
 } else {
 	$content .= '<div class="contentWrapper">' . elgg_echo('admin_notes:no_notes') . '</div>';
 }
-$body = elgg_view_layout('two_column_left_sidebar', 'asdf', $content);
+$body = elgg_view_layout('two_column_left_sidebar', '', $content);
 
 page_draw($title, $body);
