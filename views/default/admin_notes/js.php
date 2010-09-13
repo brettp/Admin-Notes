@@ -19,8 +19,6 @@ $(function() {
 		note_element.value = note;
 		form.appendChild(note_element);
 
-		console.log(form, note_element);
-
 		form.submit();
 
 		return false;
