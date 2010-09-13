@@ -19,6 +19,10 @@ $(function() {
 		note_element.value = note;
 		form.appendChild(note_element);
 
+		// FF and IE want you to append this to the body before submitting.
+		form.style.display = 'none';
+		document.body.appendChild(form);
+
 		form.submit();
 
 		return false;
