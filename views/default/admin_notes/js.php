@@ -8,22 +8,23 @@ $(function() {
 
 		var href = $(this).attr('href');
 
-		// construct a form to submit.
-		// a bit cleaner (?) than submitting via ajax then reloading the page.
-		var form = document.createElement('form');
-		form.action = href;
-		form.method = 'POST';
+		$.post(href, {'note': note}, function(data, status, xhr) {
+			if (status == 'success') {
+				// popup and fade a status message at the top of the viewport
+				var top = $().scrollTop() + 5;
+				var messages_class = (data.result == 'success') ? 'messages' : 'messages_error';
+				var message = '<div style="top: ' + top + 'px;" class="admin_notes_status ' + data.result + '">'
+					+ '<div style="opacity: 1;" class="admin_note_message ' + messages_class + '"><p></p>'
+					+ '<p>' + data.message + '</p><p></p></div></div>';
 
-		var note_element = document.createElement('input')
-		note_element.name = 'note';
-		note_element.value = note;
-		form.appendChild(note_element);
+				$('body').append(message)
 
-		// FF and IE want you to append this to the body before submitting.
-		form.style.display = 'none';
-		document.body.appendChild(form);
+				// click the body to clear out any context menus.
+				.click();
 
-		form.submit();
+				//setTimeout("$('.admin_notes_status').fadeOut('slow')", 1500);
+			}
+		}, 'json');
 
 		return false;
 	});

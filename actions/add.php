@@ -8,10 +8,16 @@
 $user_guid = get_input('user_guid', 0);
 $user = get_user($user_guid);
 $note_text = get_input('note');
+$error = $message = NULL;
 
 if (!$user || !$note_text) {
-	register_error(elgg_echo('user_notes:errors:could_not_add_note'));
-	forward(REFERER);
+	$error = elgg_echo('user_notes:errors:could_not_add_note');
+
+	echo json_encode(array(
+		'result' => 'error',
+		'message' => $error
+	));
+	exit;
 }
 
 $note = new ElggAdminNote();
@@ -19,9 +25,18 @@ $note->entity_guid = $user_guid;
 $note->description = $note_text;
 
 if ($note->save()) {
-	system_message(elgg_echo('user_notes:messages:added_note'));
+	$message = elgg_echo('user_notes:messages:added_note');
+	$json = array(
+		'result' => 'success',
+		'message' => $message
+	);
 } else {
-	register_error(elgg_echo('user_notes:errors:could_not_add_note'));
+	$error = elgg_echo('user_notes:errors:could_not_add_note');
+	$json = array(
+		'result' => 'error',
+		'message' => $error
+	);
 }
 
-forward(REFERER);
+echo json_encode($json);
+exit;

@@ -21,3 +21,18 @@
 	vertical-align: top;
 	font-size: x-large;
 }
+
+.admin_notes_status {
+	display: block;
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	z-index: 10000; /* yay big numbers!!!!! */
+}
+
+.admin_note_message {
+	width: 35%;
+	position: relative;
+	top: 0;
+	margin: auto;
+}
