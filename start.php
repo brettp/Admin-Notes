@@ -33,6 +33,9 @@ function admin_notes_init() {
 	if (isadminloggedin()) {
 		add_menu(elgg_echo('admin_notes:admin_notes'), "{$CONFIG->url}pg/admin_notes/");
 	}
+
+	// remove notes about entities when they're deleted
+	register_elgg_event_handler('delete', 'all', 'admin_notes_delete_entity_handler');
 }
 
 /**
@@ -69,5 +72,32 @@ function admin_notes_pagehandler($page) {
 function admin_notes_runonce() {
 	add_subtype('object', 'admin_note', 'ElggAdminNote');
 
+	return TRUE;
+}
+
+/*
+ * Remove notes for entities when that entity is deleted.
+ */
+function admin_notes_delete_entity_handler($event, $type, $object) {
+	if ($object instanceof ElggAdminNote || !($object instanceof ElggEntity)) {
+		return TRUE;
+	}
+
+	$old_ia = elgg_set_ignore_access(TRUE);
+	$options = array(
+		'type' => 'object',
+		'subtype' => 'admin_note',
+		'metadata_name_value_pair' => array('name' => 'entity_guid', 'value' => $object->guid)
+	);
+
+	$entities = elgg_get_entities_from_metadata($options);
+
+	if ($entities) {
+		foreach ($entities as $entity) {
+			$entity->delete();
+		}
+	}
+
+	elgg_set_ignore_access($old_ia);
 	return TRUE;
 }
