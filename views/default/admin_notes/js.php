@@ -6,6 +6,9 @@ $(function() {
 			return false;
 		}
 
+		// click the body to clear out any context menus.
+		$('body').click();
+
 		var href = $(this).attr('href');
 
 		$.post(href, {'note': note}, function(data, status, xhr) {
@@ -17,12 +20,9 @@ $(function() {
 					+ '<div style="opacity: 1;" class="admin_note_message ' + messages_class + '"><p></p>'
 					+ '<p>' + data.message + '</p><p></p></div></div>';
 
-				$('body').append(message)
+				$('body').append(message);
 
-				// click the body to clear out any context menus.
-				.click();
-
-				//setTimeout("$('.admin_notes_status').fadeOut('slow')", 1500);
+				setTimeout("$('.admin_notes_status').fadeOut('slow')", 1500);
 			}
 		}, 'json');
 
