@@ -10,11 +10,7 @@
 	float: left;
 	align: center;
 	text-align: center;
-	xfont-size: smaller;
-}
-
-.admin_note_body {
-	padding-left: 2em;
+	padding-right: 2em;
 }
 
 .admin_notes_arrow {
