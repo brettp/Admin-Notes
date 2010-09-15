@@ -34,8 +34,11 @@ function admin_notes_init() {
 		add_menu(elgg_echo('admin_notes:admin_notes'), "{$CONFIG->url}pg/admin_notes/");
 	}
 
-	// remove notes about entities when they're deleted
-	register_elgg_event_handler('delete', 'all', 'admin_notes_delete_entity_handler');
+	// optionally remove notes about entities when they're deleted
+	$delete = get_plugin_setting('delete_notes_with_entity', 'admin_notes');
+	if ($delete) {
+		register_elgg_event_handler('delete', 'all', 'admin_notes_delete_entity_handler');
+	}
 }
 
 /**

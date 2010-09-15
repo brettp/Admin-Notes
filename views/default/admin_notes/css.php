@@ -18,6 +18,17 @@
 	font-size: x-large;
 }
 
+.admin_notes_deleted {
+	color: black;
+	vertical-align: top;
+	font-size: xx-large;
+}
+
+.admin_notes_deleted:hover {
+	color: black;
+	text-decoration: none;
+}
+
 .admin_notes_status {
 	display: block;
 	position: absolute;

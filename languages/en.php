@@ -8,6 +8,7 @@ $en = array(
 
 	'admin_notes:add_note' => 'Add admin note',
 	'admin_notes:view_notes' => 'View admin notes',
+	'admin_notes:deleted_entity' => 'Deleted',
 
 	'admin_notes:user_admin_notes' => 'Admin notes for %s',
 	'admin_notes:all_admin_notes' => 'All admin notes',
@@ -20,6 +21,8 @@ $en = array(
 
 	'user_notes:messages:added_note' => 'Added note.',
 	'admin_notes:messages:deleted' => 'Deleted note.',
+
+	'admin_notes:settings:delete_notes_with_entity' => 'Delete notes about a user when the user is deleted.',
 );
 
 add_translation('en', $en);
