@@ -23,6 +23,9 @@ if (!$user || !$note_text) {
 $note = new ElggAdminNote();
 $note->entity_guid = $user_guid;
 $note->description = $note_text;
+$note->original_username = $user->name;
+$note->original_email = $user->email;
+$note->original_name = $user->name;
 
 if ($note->save()) {
 	$message = elgg_echo('user_notes:messages:added_note');

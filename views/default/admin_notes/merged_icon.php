@@ -5,6 +5,7 @@
 
 $owner = $vars['owner'];
 $entity = $vars['entity'];
+$note = $vars['note'];
 
 $owner_icon_url = $owner->getIcon('small');
 $owner_icon_html = "<a title=\"$owner->name\"><img alt=\"$owner->name\" src=\"$owner_icon_url\" /></a>";
@@ -15,7 +16,7 @@ if ($entity) {
 	$entity_icon_html = "<a title=\"$entity->name\" href=\"{$vars['url']}pg/admin_notes/$entity->username\">"
 		. "<img alt=\"$entity->name\" src=\"$entity_icon_url\" /></a>";
 } else {
-	$deleted = elgg_echo('admin_notes:deleted_entity');
+	$deleted = sprintf(elgg_echo('admin_notes:deleted_entity'), $note->original_username, $note->original_email);
 	$entity_icon_html = "<a class=\"admin_notes_deleted\" title=\"$deleted\">X</a>";
 }
 

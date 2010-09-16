@@ -13,7 +13,7 @@ $delete_link = elgg_view('output/confirmlink', array(
 	'confirm' => elgg_echo('admin_notes:delete_confirm')
 ));
 
-$icon = elgg_view('admin_notes/merged_icon', array('entity' => $entity, 'owner' => $owner));
+$icon = elgg_view('admin_notes/merged_icon', array('entity' => $entity, 'owner' => $owner, 'note' => $note));
 ?>
 
 <div class="contentWrapper admin_note">
@@ -22,5 +22,5 @@ $icon = elgg_view('admin_notes/merged_icon', array('entity' => $entity, 'owner' 
 		<span class="admin_note_icon"><?php echo $icon; ?></span>
 		<span class="admin_note_timestamp"><?php echo friendly_time($note->time_created)?></span>
 	</div>
-	<span class="admin_note_body"><?php echo $note->description; ?></span>
+	<span class="admin_note_body"><p><?php echo $note->description; ?></p></span>
 </div>

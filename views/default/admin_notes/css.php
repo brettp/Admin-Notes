@@ -13,6 +13,10 @@
 	padding-right: 2em;
 }
 
+.admin_note_body p {
+	margin-right: 50px;
+}
+
 .admin_notes_arrow {
 	vertical-align: top;
 	font-size: x-large;

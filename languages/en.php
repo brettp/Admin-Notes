@@ -8,7 +8,7 @@ $en = array(
 
 	'admin_notes:add_note' => 'Add admin note',
 	'admin_notes:view_notes' => 'View admin notes',
-	'admin_notes:deleted_entity' => 'Deleted',
+	'admin_notes:deleted_entity' => 'Deleted Entity (originally %s &lt;%s&gt;)',
 
 	'admin_notes:user_admin_notes' => 'Admin notes for %s',
 	'admin_notes:all_admin_notes' => 'All admin notes',
