@@ -1,0 +1,8 @@
+Admin Notes 1.1 - September 16, 2010
+ * Using all AJAX to save the note.
+ * Fixed bug that would WSOD on list page if a user with notes was deleted.
+ * Option to delete notes when deleting a user.
+ * Formatting fixes on list note page.
+
+Admin Notes 1.0 - September 12, 2010
+ * Initial release.
