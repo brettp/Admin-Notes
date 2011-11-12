@@ -1,4 +1,4 @@
-### Admin Notes 1.8 ###
+### Admin Notes 1.2 - <release date> ###
  * Updated for Elgg 1.8
 
 ### Admin Notes 1.1 - September 16, 2010 ###
