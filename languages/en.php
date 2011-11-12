@@ -4,6 +4,7 @@
  */
 
 $en = array(
+	'item:object:admin_note' => 'Admin notes',
 	'admin_notes:admin_notes' => 'Admin notes',
 
 	'admin_notes:add_note' => 'Add admin note',
