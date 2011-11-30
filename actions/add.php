@@ -11,7 +11,7 @@ $note_text = get_input('note');
 $error = $message = NULL;
 
 if (!$user || !$note_text) {
-	$error = elgg_echo('user_notes:errors:could_not_add_note');
+	$error = elgg_echo('admin_notes:errors:could_not_add_note');
 
 	echo json_encode(array(
 		'result' => 'error',
@@ -28,13 +28,13 @@ $note->original_email = $user->email;
 $note->original_name = $user->name;
 
 if ($note->save()) {
-	$message = elgg_echo('user_notes:messages:added_note');
+	$message = elgg_echo('admin_notes:messages:added_note');
 	$json = array(
 		'result' => 'success',
 		'message' => $message
 	);
 } else {
-	$error = elgg_echo('user_notes:errors:could_not_add_note');
+	$error = elgg_echo('admin_notes:errors:could_not_add_note');
 	$json = array(
 		'result' => 'error',
 		'message' => $error

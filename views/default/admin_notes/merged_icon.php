@@ -13,7 +13,7 @@ $note = $vars['note'];
 
 $owner_icon = elgg_view_entity_icon($owner, 'small');
 
-$timestamp = friendly_time($note->time_created);
+$timestamp = elgg_view_friendly_time($note->time_created);
 
 // handle deleted entities
 if ($entity) {

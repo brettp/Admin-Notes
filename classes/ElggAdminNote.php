@@ -4,8 +4,8 @@
  */
 
 class ElggAdminNote extends ElggObject {
-	protected function initialise_attributes() {
-		parent::initialise_attributes();
+	protected function initializeAttributes() {
+		parent::initializeAttributes();
 
 		// override the default file subtype.
 		$this->attributes['subtype'] = 'admin_note';
