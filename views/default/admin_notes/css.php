@@ -1,36 +1,24 @@
-.admin_note {
-	min-height: 60px;
+
+.admin-notes-icons > span {
+	position: relative;
+	top: -12px;
 }
 
-.admin_note_delete {
-	float: right;
-}
-
-.admin_note_metadata {
-	float: left;
-	align: center;
-	text-align: center;
-	padding-right: 2em;
-}
-
-.admin_note_body p {
-	margin-right: 50px;
-}
-
-.admin_notes_arrow {
-	vertical-align: top;
-	font-size: x-large;
-}
-
-.admin_notes_deleted {
+.admin-notes-deleted-user {
+	position: relative;
+	top: -8px;
+	padding: 0 10px;
 	color: black;
-	vertical-align: top;
 	font-size: xx-large;
 }
 
-.admin_notes_deleted:hover {
+.admin-notes-deleted-user:hover {
 	color: black;
 	text-decoration: none;
+}
+
+.admin_note {
+	min-height: 60px;
 }
 
 .admin_notes_status {

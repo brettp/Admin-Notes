@@ -3,7 +3,7 @@
  * Enter quick notes about a user.
  */
 
-register_elgg_event_handler('init', 'system', 'admin_notes_init');
+elgg_register_event_handler('init', 'system', 'admin_notes_init');
 
 /**
  * Init
@@ -11,40 +11,37 @@ register_elgg_event_handler('init', 'system', 'admin_notes_init');
 function admin_notes_init() {
 	global $CONFIG;
 
-	require dirname(__FILE__) . '/lib/ElggAdminNote.php';
-
-	// register the subtype class
-	run_function_once('admin_notes_runonce');
-
 	// user hover menu links, js, and css extensions
-	elgg_extend_view('profile/menu/adminlinks', 'admin_notes/user_menu_entry');
-	elgg_extend_view('js/initialise_elgg', 'admin_notes/js');
-	elgg_extend_view('css', 'admin_notes/css');
+	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'admin_notes_hover_menu');
+	elgg_extend_view('js/elgg', 'admin_notes/js');
+	elgg_extend_view('css/elgg', 'admin_notes/css');
 
 	// actions
 	$action_path = dirname(__FILE__) . '/actions/';
-	register_action('admin_notes/add', FALSE, $action_path . 'add.php', TRUE);
-	register_action('admin_notes/delete', FALSE, $action_path . 'delete.php', TRUE);
+	elgg_register_action('admin_notes/add', $action_path . 'add.php', 'admin');
+	elgg_register_action('admin_notes/delete', $action_path . 'delete.php', 'admin');
 
 	// list notes page handler
-	register_page_handler('admin_notes', 'admin_notes_pagehandler');
+	elgg_register_page_handler('admin_notes', 'admin_notes_pagehandler');
 
 	// admin menu for all notices
-	if (isadminloggedin()) {
-		add_menu(elgg_echo('admin_notes:admin_notes'), "{$CONFIG->url}pg/admin_notes/");
+	if (elgg_is_admin_logged_in()) {
+		$item = new ElggMenuItem('admin_notes', elgg_echo('admin_notes:admin_notes'), 'admin_notes');
+		elgg_register_menu_item('site', $item);
 	}
 
 	// optionally remove notes about entities when they're deleted
-	$delete = get_plugin_setting('delete_notes_with_entity', 'admin_notes');
+	$delete = elgg_get_plugin_setting('delete_notes_with_entity', 'admin_notes');
 	if ($delete) {
-		register_elgg_event_handler('delete', 'all', 'admin_notes_delete_entity_handler');
+		elgg_register_event_handler('delete', 'all', 'admin_notes_delete_entity_handler');
 	}
 }
 
 /**
  * Shows notes on users.
  *
- * @param unknown_type $page
+ * @param array $page URL segments
+ * @return bool
  */
 function admin_notes_pagehandler($page) {
 	admin_gatekeeper();
@@ -54,32 +51,58 @@ function admin_notes_pagehandler($page) {
 	if ($username && !($user = get_user_by_username($username))) {
 		// invalid username passed. emit error and forward to all.
 		register_error(elgg_echo('admin_notes:unknown_user'));
-		forward('/pg/admin_notes/');
+		forward('admin_notes');
 	}
 
 	// for owner blocks
 	if ($user) {
-		set_page_owner($user->guid);
+		elgg_set_page_owner_guid($user->getGUID());
 	} else {
-		set_page_owner(get_loggedin_userid());
+		elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
 	}
 
 	include dirname(__FILE__) . '/pages/list_notes.php';
-
-	return TRUE;
+	return true;
 }
 
 /**
- * Register the subtype class.
+ * Add a menu item to user hover menu
+ *
+ * @param string $hook   Plugin hook name
+ * @param string $type   Hook type
+ * @param array  $menu   Array of ElggMenuItem objects
+ * @param array  $params Array of parameters related to menu
+ * @return array
  */
-function admin_notes_runonce() {
-	add_subtype('object', 'admin_note', 'ElggAdminNote');
+function admin_notes_hover_menu($hook, $type, $menu, $params) {
+	$user = $params['entity'];
 
-	return TRUE;
+	$url = "action/admin_notes/add?user_guid=$user->guid";
+	$menu[] = ElggMenuItem::factory(array(
+		'name' => 'admin_notes_add',
+		'text' => elgg_echo('admin_notes:add_note'),
+		'href' => $url,
+		'is_action' => true,
+		'section' => 'admin',
+	));
+
+	$menu[] = ElggMenuItem::factory(array(
+		'name' => 'admin_notes_view',
+		'text' => elgg_echo('admin_notes:view_notes'),
+		'href' => 'admin_notes/' . $user->username,
+		'section' => 'admin',
+	));
+
+	return $menu;
 }
 
-/*
- * Remove notes for entities when that entity is deleted.
+/**
+ * Remove notes for an entity when that entity is deleted.
+ *
+ * @param string     $event  Event name
+ * @param string     $type   Event type
+ * @param ElggEntity $object Entity being deleted
+ * @return void
  */
 function admin_notes_delete_entity_handler($event, $type, $object) {
 	if ($object instanceof ElggAdminNote || !($object instanceof ElggEntity)) {
@@ -102,5 +125,4 @@ function admin_notes_delete_entity_handler($event, $type, $object) {
 	}
 
 	elgg_set_ignore_access($old_ia);
-	return TRUE;
 }
