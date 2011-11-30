@@ -13,7 +13,7 @@ $title = elgg_echo('admin_notes:all_admin_notes');
 
 if ($user) {
 	$options['metadata_name_value_pair'] = array('name' => 'entity_guid', 'value' => $user->guid);
-	$title = sprintf(elgg_echo('admin_notes:user_admin_notes'), $user->name);
+	$title = elgg_echo('admin_notes:user_admin_notes', array($user->name));
 }
 
 $content = elgg_view_title($title);
@@ -21,8 +21,8 @@ $content = elgg_view_title($title);
 if ($notes = elgg_list_entities_from_metadata($options)) {
 	$content .= $notes;
 } else {
-	$content .= '<div class="contentWrapper">' . elgg_echo('admin_notes:no_notes') . '</div>';
+	$content .= '<p>' . elgg_echo('admin_notes:no_notes') . '</p>';
 }
-$body = elgg_view_layout('two_column_left_sidebar', '', $content);
+$body = elgg_view_layout('one_sidebar', array('content' => $content));
 
-page_draw($title, $body);
+echo elgg_view_page($title, $body);

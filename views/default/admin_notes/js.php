@@ -1,5 +1,5 @@
 $(function() {
-	$('a.admin_notes_add').click(function() {
+	$('.elgg-menu-item-admin-notes-add > a').click(function() {
 		var note = prompt('<?php echo elgg_echo('admin_notes:add_note'); ?>', '');
 
 		if (!note) {
