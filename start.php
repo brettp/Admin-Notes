@@ -9,12 +9,11 @@ elgg_register_event_handler('init', 'system', 'admin_notes_init');
  * Init
  */
 function admin_notes_init() {
-	global $CONFIG;
-
 	// user hover menu links, js, and css extensions
 	elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'admin_notes_hover_menu');
-	elgg_extend_view('js/elgg', 'admin_notes/js');
 	elgg_extend_view('css/elgg', 'admin_notes/css');
+
+	elgg_require_js('admin_notes');
 
 	// actions
 	$action_path = dirname(__FILE__) . '/actions/';
@@ -46,22 +45,18 @@ function admin_notes_init() {
 function admin_notes_pagehandler($page) {
 	admin_gatekeeper();
 
-	$username = (isset($page[0])) ? $page[0] : NULL;
+	$username = !empty($page[0]) ? $page[0] : NULL;
+	$user = $username ? get_user_by_username($username) : false;
 
-	if ($username && !($user = get_user_by_username($username))) {
+	if ($username && !$user) {
 		// invalid username passed. emit error and forward to all.
 		register_error(elgg_echo('admin_notes:unknown_user'));
 		forward('admin_notes');
 	}
 
-	// for owner blocks
-	if ($user) {
-		elgg_set_page_owner_guid($user->getGUID());
-	} else {
-		elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
-	}
-
-	include dirname(__FILE__) . '/pages/list_notes.php';
+	echo elgg_view('resources/admin_notes/list', array(
+		'user' => $user,
+	));
 	return true;
 }
 
@@ -77,12 +72,11 @@ function admin_notes_pagehandler($page) {
 function admin_notes_hover_menu($hook, $type, $menu, $params) {
 	$user = $params['entity'];
 
-	$url = "action/admin_notes/add?user_guid=$user->guid";
 	$menu[] = ElggMenuItem::factory(array(
 		'name' => 'admin_notes_add',
 		'text' => elgg_echo('admin_notes:add_note'),
-		'href' => $url,
-		'is_action' => true,
+		'href' => 'javascript:',
+		'data-user-guid' => $user->guid,
 		'section' => 'admin',
 	));
 
@@ -102,11 +96,11 @@ function admin_notes_hover_menu($hook, $type, $menu, $params) {
  * @param string     $event  Event name
  * @param string     $type   Event type
  * @param ElggEntity $object Entity being deleted
- * @return void
+ * @return bool
  */
 function admin_notes_delete_entity_handler($event, $type, $object) {
 	if ($object instanceof ElggAdminNote || !($object instanceof ElggEntity)) {
-		return TRUE;
+		return true;
 	}
 
 	$old_ia = elgg_set_ignore_access(TRUE);
